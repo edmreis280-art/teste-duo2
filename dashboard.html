@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>EnglishGo - Dashboard</title>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="stats-container">
+            <span id="userNameDisplay">👤 Usuário</span>
+            <span class="xp-badge"><i class="fas fa-fire"></i> <span id="xpDisplay">0</span> XP</span>
+            <button onclick="logout()" class="logout-btn"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </div>
+
+    <div class="container" id="mainContent">
+        <div class="unit-header">
+            <h2>Unidade 1</h2>
+            <p>Saudações básicas</p>
+        </div>
+        
+        <div class="pathway">
+            <div class="unit-node" onclick="startLesson()"><i class="fas fa-star"></i></div>
+            <div class="unit-node node-blue" onclick="startLesson()"><i class="fas fa-comment"></i></div>
+            <div class="unit-node node-yellow" onclick="startLesson()"><i class="fas fa-apple-alt"></i></div>
+        </div>
+    </div>
+
+    <div id="exerciseArea" class="container" style="display: none;">
+        <div class="card">
+            <h3 id="questionTitle">Questão...</h3>
+            <div id="optionsContainer"></div>
+            <button class="btn btn-outline" onclick="speakWord()"><i class="fas fa-volume-up"></i> OUVIR</button>
+        </div>
+        <button id="checkBtn" class="btn btn-green" onclick="checkAnswer()">VERIFICAR</button>
+    </div>
+
+    <div id="feedbackArea" class="feedback">
+        <div class="feedback-content">
+            <span id="feedbackText"></span>
+            <button class="btn btn-green btn-continue" onclick="nextQuestion()">CONTINUAR</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
