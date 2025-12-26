@@ -4,41 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>EnglishGo - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>EnglishGo - Login</title>
 </head>
 <body>
-    <div class="top-bar">
-        <div class="stats-container">
-            <span id="userNameDisplay">👤 Carregando...</span>
-            <span style="color: var(--duo-yellow)">🔥 <span id="xpDisplay">0</span> XP</span>
-            <span style="color: var(--duo-red)">❤️ 5</span>
-        </div>
-    </div>
-
-    <div class="container" id="mainContent">
-        <h2 style="text-align: left;">Unidade 1</h2>
-        <p style="text-align: left; color: gray;">Saudações e Básicos</p>
-        
-        <div class="unit-node" onclick="startLesson()">★</div>
-        <div class="unit-node" onclick="startLesson()" style="margin-left: 40px;">💬</div>
-        <div class="unit-node" onclick="startLesson()" style="margin-right: 40px;">🍎</div>
-    </div>
-
-    <div id="exerciseArea" class="container" style="display: none;">
+    <div class="container">
+        <div class="logo-animation">🦉</div>
+        <h1 class="brand-name">EnglishGo</h1>
         <div class="card">
-            <h3 id="questionTitle">Como se diz "Olá"?</h3>
-            <div id="optionsContainer">
-                </div>
-            <button class="btn btn-blue" onclick="speakWord()">🔊 OUVIR</button>
+            <input type="text" id="loginUser" placeholder="Usuário" class="option-btn">
+            <input type="password" id="loginPass" placeholder="Senha" class="option-btn">
+            <button class="btn btn-green" onclick="login()">ENTRAR</button>
         </div>
-        <button id="checkBtn" class="btn btn-green" onclick="checkAnswer()">VERIFICAR</button>
+        <p>Ainda não tem conta? <a href="register.html" class="link-blue">Cadastre-se</a></p>
     </div>
-
-    <div id="feedbackArea" class="feedback">
-        <span id="feedbackText"></span>
-        <button class="btn btn-green" onclick="nextQuestion()" style="width: auto; margin-left: 20px;">CONTINUAR</button>
-    </div>
-
     <script src="script.js"></script>
 </body>
 </html>
