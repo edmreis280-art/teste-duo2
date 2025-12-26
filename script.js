@@ -140,3 +140,12 @@ function playTone(freq, dur) {
     gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
     osc.stop(ctx.currentTime + dur);
 }
+// No momento do LOGIN (dentro da função login)
+if (found) {
+    sessionStorage.setItem('loggedUser', JSON.stringify(found));
+    window.location.href = 'dashboard.html'; // Certifique-se que o nome é este
+}
+
+// No momento do CADASTRO (após registrar)
+alert("Conta criada!");
+window.location.href = 'index.html'; // Volta para a tela de login
