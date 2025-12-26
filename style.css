@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+    --duo-green: #58cc02;
+    --duo-green-dark: #46a302;
+    --duo-blue: #1cb0f6;
+    --duo-yellow: #ffc800;
+    --duo-red: #ff4b4b;
+    --duo-gray: #e5e5e5;
+    --text-color: #3c3c3c;
+    --bg-color: #ffffff;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* --- Componentes de Interface --- */
+.container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.card {
+    background: white;
+    border: 2px solid var(--duo-gray);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+h1 { color: var(--duo-green); }
+
+/* --- Botões Estilo Duolingo --- */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: none;
+    border-bottom: 4px solid rgba(0,0,0,0.2);
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: filter 0.2s, transform 0.1s;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn:active {
+    transform: translateY(2px);
+    border-bottom-width: 2px;
+}
+
+.btn-green { background-color: var(--duo-green); color: white; }
+.btn-blue { background-color: var(--duo-blue); color: white; }
+.btn-outline { background: white; border: 2px solid var(--duo-gray); color: var(--duo-blue); }
+
+/* --- Dashboard / Trilhas --- */
+.top-bar {
+    width: 100%;
+    background: white;
+    border-bottom: 2px solid var(--duo-gray);
+    padding: 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-around;
+    max-width: 500px;
+    margin: 0 auto;
+    font-weight: bold;
+}
+
+.unit-node {
+    width: 80px;
+    height: 70px;
+    background: var(--duo-green);
+    border-radius: 50%;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    border-bottom: 6px solid var(--duo-green-dark);
+    cursor: pointer;
+    position: relative;
+}
+
+/* --- Exercícios --- */
+.option-btn {
+    background: white;
+    border: 2px solid var(--duo-gray);
+    border-bottom: 4px solid var(--duo-gray);
+    border-radius: 12px;
+    padding: 15px;
+    margin: 10px 0;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    font-size: 18px;
+}
+
+.option-btn.selected {
+    border-color: var(--duo-blue);
+    background-color: #ddf4ff;
+}
+
+.feedback {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    display: none;
+    text-align: center;
+    font-weight: bold;
+}
+
+.feedback.correct { background: #d7ffb8; color: #58a700; display: block; }
+.feedback.wrong { background: #ffdfe0; color: #ea2b2b; display: block; }
