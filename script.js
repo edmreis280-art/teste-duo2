@@ -1,3 +1,8 @@
+
+if (window.location.pathname.includes('dashboard.html')) {
+    const user = JSON.parse(sessionStorage.getItem('loggedUser'));
+    if (!user) window.location.href = 'index.html';
+}
 // --- SISTEMA DE DADOS (LOCALSTORAGE) ---
 const getData = () => JSON.parse(localStorage.getItem('users')) || [];
 const getCurrentUser = () => JSON.parse(sessionStorage.getItem('loggedUser'));
