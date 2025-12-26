@@ -1,156 +1,124 @@
+// --- DATABASE LOCAL ---
+const getUsers = () => JSON.parse(localStorage.getItem('duo_users')) || [];
+const getActive = () => JSON.parse(sessionStorage.getItem('duo_active'));
 
-if (window.location.pathname.includes('dashboard.html')) {
-    const user = JSON.parse(sessionStorage.getItem('loggedUser'));
-    if (!user) window.location.href = 'index.html';
-}
-// --- SISTEMA DE DADOS (LOCALSTORAGE) ---
-const getData = () => JSON.parse(localStorage.getItem('users')) || [];
-const getCurrentUser = () => JSON.parse(sessionStorage.getItem('loggedUser'));
-
-// --- CADASTRO ---
+// --- AUTH ---
 function register() {
-    const user = document.getElementById('regUser').value;
-    const pass = document.getElementById('regPass').value;
-    const users = getData();
+    const user = document.getElementById('regUser').value.trim();
+    const pass = document.getElementById('regPass').value.trim();
+    if(!user || !pass) return alert("Preencha os campos!");
 
-    if (users.find(u => u.username === user)) {
-        alert("Usuário já existe!");
-        return;
-    }
+    let users = getUsers();
+    if(users.find(u => u.name.toLowerCase() === user.toLowerCase())) return alert("Usuário já existe!");
 
-    const newUser = { username: user, password: pass, xp: 0, level: 'Iniciante' };
-    users.push(newUser);
-    localStorage.setItem('users', JSON.stringify(users));
-    alert("Conta criada! Vá para o Login.");
-    window.location.href = 'login.html';
+    users.push({ name: user, pass: pass, xp: 0 });
+    localStorage.setItem('duo_users', JSON.stringify(users));
+    alert("Conta criada!"); window.location.href = 'index.html';
 }
 
-// --- LOGIN ---
 function login() {
-    const user = document.getElementById('loginUser').value;
-    const pass = document.getElementById('loginPass').value;
-    const users = getData();
+    const user = document.getElementById('loginUser').value.trim();
+    const pass = document.getElementById('loginPass').value.trim();
+    const auth = getUsers().find(u => u.name === user && u.pass === pass);
 
-    const found = users.find(u => u.username === user && u.password === pass);
-    if (found) {
-        sessionStorage.setItem('loggedUser', JSON.stringify(found));
-        window.location.href = 'index.html';
+    if(auth) {
+        sessionStorage.setItem('duo_active', JSON.stringify(auth));
+        window.location.href = 'dashboard.html';
     } else {
         alert("Dados incorretos!");
     }
 }
 
-// --- MECÂNICA DE LIÇÃO ---
-let currentQuestion = 0;
+function logout() { sessionStorage.clear(); window.location.href = 'index.html'; }
+
+// --- MOTOR DE EXERCÍCIOS ---
+let currentQ = 0;
 const questions = [
-    { q: 'Como se diz "Olá"?', options: ['Hello', 'Goodbye', 'Apple'], correct: 0, word: 'Hello' },
-    { q: 'Qual dessas é "Maçã"?', options: ['Bread', 'Apple', 'Water'], correct: 1, word: 'Apple' },
-    { q: 'Traduza: "I am a student"', options: ['Eu sou professor', 'Eu sou estudante', 'Eu tenho um carro'], correct: 1, word: 'I am a student' }
+    { q: 'Como se diz "Maçã"?', opt: ['Banana', 'Apple', 'Water'], ans: 1, word: 'Apple' },
+    { q: 'Traduza: "Good Morning"', opt: ['Bom dia', 'Boa noite', 'Olá'], ans: 0, word: 'Good Morning' },
+    { q: 'Qual é "Amigo"?', opt: ['Enemy', 'Friend', 'Teacher'], ans: 1, word: 'Friend' }
 ];
 
 function startLesson() {
     document.getElementById('mainContent').style.display = 'none';
     document.getElementById('exerciseArea').style.display = 'block';
-    loadQuestion();
+    loadQ();
 }
 
-function loadQuestion() {
-    const q = questions[currentQuestion];
+function loadQ() {
+    const q = questions[currentQ];
     document.getElementById('questionTitle').innerText = q.q;
     const container = document.getElementById('optionsContainer');
     container.innerHTML = '';
 
-    q.options.forEach((opt, index) => {
+    q.opt.forEach((o, i) => {
         const btn = document.createElement('button');
         btn.className = 'option-btn';
-        btn.innerText = opt;
+        btn.innerText = o;
         btn.onclick = () => {
             document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-            btn.dataset.index = index;
+            btn.dataset.idx = i;
         };
         container.appendChild(btn);
     });
 }
 
 function checkAnswer() {
-    const selected = document.querySelector('.option-btn.selected');
-    if (!selected) return;
+    const sel = document.querySelector('.option-btn.selected');
+    if(!sel) return;
 
-    const answer = parseInt(selected.dataset.index);
-    const isCorrect = answer === questions[currentQuestion].correct;
-    const feedback = document.getElementById('feedbackArea');
+    const correct = parseInt(sel.dataset.idx) === questions[currentQ].ans;
+    const fb = document.getElementById('feedbackArea');
+    fb.style.display = 'block';
 
-    if (isCorrect) {
-        feedback.className = 'feedback correct';
+    if(correct) {
+        fb.className = 'feedback correct';
         document.getElementById('feedbackText').innerText = "Mandou bem! +10 XP";
         updateXP(10);
-        playTone(800, 0.2); // Som de acerto
     } else {
-        feedback.className = 'feedback wrong';
-        document.getElementById('feedbackText').innerText = "Ops! Resposta errada.";
+        fb.className = 'feedback wrong';
+        document.getElementById('feedbackText').innerText = "A resposta era: " + questions[currentQ].opt[questions[currentQ].ans];
     }
 }
 
 function nextQuestion() {
-    currentQuestion++;
+    currentQ++;
     document.getElementById('feedbackArea').style.display = 'none';
-    if (currentQuestion < questions.length) {
-        loadQuestion();
+    if(currentQ < questions.length) {
+        loadQ();
     } else {
-        alert("Lição Concluída!");
-        window.location.reload();
+        alert("Lição finalizada!");
+        window.location.href = 'dashboard.html';
     }
 }
 
-// --- UTILITÁRIOS ---
 function speakWord() {
-    const msg = new SpeechSynthesisUtterance();
-    msg.text = questions[currentQuestion].word;
-    msg.lang = 'en-US';
-    window.speechSynthesis.speak(msg);
+    const synth = window.speechSynthesis;
+    const utter = new SpeechSynthesisUtterance(questions[currentQ].word);
+    utter.lang = 'en-US';
+    synth.speak(utter);
 }
 
 function updateXP(val) {
-    let user = getCurrentUser();
-    user.xp += val;
-    sessionStorage.setItem('loggedUser', JSON.stringify(user));
+    let active = getActive();
+    let users = getUsers();
+    let idx = users.findIndex(u => u.name === active.name);
     
-    // Atualiza no localStorage global também
-    let users = getData();
-    let idx = users.findIndex(u => u.username === user.username);
-    users[idx].xp = user.xp;
-    localStorage.setItem('users', JSON.stringify(users));
+    users[idx].xp += val;
+    active.xp += val;
     
-    document.getElementById('xpDisplay').innerText = user.xp;
+    localStorage.setItem('duo_users', JSON.stringify(users));
+    sessionStorage.setItem('duo_active', JSON.stringify(active));
+    document.getElementById('xpDisplay').innerText = active.xp;
 }
 
-// Inicialização da Dashboard
-if (document.getElementById('userNameDisplay')) {
-    const user = getCurrentUser();
-    if (!user) window.location.href = 'login.html';
-    document.getElementById('userNameDisplay').innerText = `👤 ${user.username}`;
-    document.getElementById('xpDisplay').innerText = user.xp;
-}
-
-// Função simples para som (Web Audio API)
-function playTone(freq, dur) {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.value = freq;
-    osc.start();
-    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
-    osc.stop(ctx.currentTime + dur);
-}
-// No momento do LOGIN (dentro da função login)
-if (found) {
-    sessionStorage.setItem('loggedUser', JSON.stringify(found));
-    window.location.href = 'dashboard.html'; // Certifique-se que o nome é este
-}
-
-// No momento do CADASTRO (após registrar)
-alert("Conta criada!");
-window.location.href = 'index.html'; // Volta para a tela de login
+// Proteção de Rota
+window.onload = () => {
+    if(window.location.pathname.includes('dashboard.html')) {
+        const active = getActive();
+        if(!active) window.location.href = 'index.html';
+        document.getElementById('userNameDisplay').innerText = `👤 ${active.name}`;
+        document.getElementById('xpDisplay').innerText = active.xp;
+    }
+};
