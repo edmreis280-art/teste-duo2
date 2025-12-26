@@ -1,23 +1,38 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <title>EnglishGo - Login</title>
+  <meta charset="UTF-8">
+  <title>EnglishPlay</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="logo-animation">🦉</div>
-        <h1 class="brand-name">EnglishGo</h1>
-        <div class="card">
-            <input type="text" id="loginUser" placeholder="Usuário" class="option-btn">
-            <input type="password" id="loginPass" placeholder="Senha" class="option-btn">
-            <button class="btn btn-green" onclick="login()">ENTRAR</button>
-        </div>
-        <p>Ainda não tem conta? <a href="register.html" class="link-blue">Cadastre-se</a></p>
-    </div>
-    <script src="script.js"></script>
+
+<header>
+  <span id="userName"></span>
+  <span>XP: <b id="xp">0</b></span>
+</header>
+
+<div class="progress">
+  <div id="progressBar"></div>
+</div>
+
+<h2>Lições</h2>
+
+<div class="lessons">
+  <div class="lesson" onclick="nextCard()">📘 Vocabulário</div>
+  <div class="lesson locked">🔒 Exercícios</div>
+</div>
+
+<div class="card lessonCard">
+  <h2 id="word">Hello</h2>
+  <p id="translation">Olá</p>
+
+  <button onclick="speak()">Ouvir</button>
+  <button onclick="correct()">Próximo</button>
+
+  <p id="feedback"></p>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
